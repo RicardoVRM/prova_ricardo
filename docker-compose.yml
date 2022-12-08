@@ -1,0 +1,29 @@
+version: "3.9"
+services: 
+    web-server:
+      image: nginx:1.21.1
+      container_name: webdev-nginx
+      ports:
+        - "80:80"
+      networks:
+        - web-dev
+      volumes:
+        - ./nginx/servers/:/etc/nginx/conf.d/
+        - ./:/var/www/projeto
+
+    php:
+      build:
+        dockerfile: /php.dockerfile
+        context: .
+      image: php7.4-fpm
+      container_name: webdev-php
+      volumes: 
+        - ./:/var/www/projeto
+      ports: 
+        - "9000:9000"
+      networks: 
+        - web-dev
+
+networks: 
+      web-dev:
+        driver: bridge
